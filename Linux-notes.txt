@@ -1,0 +1,260 @@
+Linux is case-sensitive system
+
+strace -e open ls ???
+
+find .*location* -name "kramer"
+locate name
+sudo updatedb
+
+* - represents zero or more characters
+? - represents a single character
+[] - represents a range of characters
+
+ls -li to show inode
+
+hard links only work within the same partition 
+
+ls -ltri
+inode test for links (hard is the same)
+33586719 16777359 33586719
+
+jerry kramer george lex clark lois homer bart lisa marge
+
+ACL
+getfacl file
+setfacl -m u:gm:rw file
+setfacl -m g:gm:rw file
+
+# To Remove
+setfacl -x u:gm /tmp/tx
+# To remove everything
+setfacl -b file
+
+To allow all files or directories to inherit ACL entries from the directory it is within
+setfacl -dm "entry" /path/to/dir
+
+# For recursive inheritance or remove
+setfacl -Rm
+setfacl -Rb
+
+# Update man database
+sudo mandb 
+
+
+Standard input (stdin) and it has file descriptor number as 0
+Standard output (stdout) and it has file descriptor number as 1
+Standard error (stderr) and it has file descriptor number as 2
+  ls -l /root 2>errorfile
+
+Input (stdin) - 0
+Input is used when feeding file contents to a file
+E.g.
+cat < listings
+
+
+“tee” command is used to store and view (both at the same time) the output of any command
+# a to append
+echo "David Puddy is Eliane's boyfriend"| tee -a eliane-david
+
+# ownership and group
+chown gm:gm file
+
+more file - one page at the time
+less file - also j and k to scroll by line or up and down key
+
+# : is delimiter
+cut -d: -f 6 /etc/passwd
+ls -l | cut -c2-4
+cut -d: -f1  /etc/passwd
+
+awk '{print $1'} seinfeld-characters
+# To search
+awk '/Seinfeld/ {print}' seinfeld-characters
+awk -F: '{print $1}' /etc/passwd
+
+echo "Hello Tom" | awk '{$2="Adam"; print $0}'
+
+awk 'length($0)>15' seinfeld-characters
+# Match 
+ls -l | awk '{if($NF=="seinfeld") print$0}'
+# Number of fields
+ls -l | awk '{print NF}'
+
+# GREP
+# -i case-insensitive  -n line numbers -v ignore (exclude search result)
+grep -i seinfeld seinfeld-characters
+
+grep -vi seinfeld seinfeld-characters | awk '{print $1}' | cut -c1-3
+
+# egrep for serch 2 words
+egrep -i "seinfeld|Costanza" seinfeld-characters
+
+# sort then uniq
+sort seinfeld-characters | uniq
+sort seinfeld-characters | uniq -c
+
+# List only directories
+ls -d */
+
+#  Compare Files (diff and cmp)
+diff line by line , cmp byte by byte
+
+# tar gzip
+to create 
+tar -cvf my.tar .
+gzip filname
+to extract
+tar -xvf my.tar
+gzip -d filename
+
+truncate -s 40 file
+
+split -l 2 countries name
+
+cat sepaa sepab > newsep
+
+# example 1-10 cat testfile | tail -5  | head -4
+
+VIM
+i for insert then esc
+shift zz to save
+dd to delete line u to recover x - delete character
+o - create new line
+
+SED
+
+sed 's/Kenny/Lenny/g' seinfeld-characters # g for global
+sed -i 's/Kenny/Lenny/g' seinfeld-characters # g for global # i to apply changes
+
+to delete
+
+sed '/Seinfeld/d' seinfeld-characters
+
+# Delete empty lines
+sed -i '/^$/d' seinfeld-characters
+
+# Delete lines
+sed '1,2d' seinfeld-characters
+
+# Replace Tab wit Space
+sed -i 's/\t/ /g' seinfeld-characters
+
+sed -n 12,18p seinfeld-characters # show only this lines
+
+sed 12,18d seinfeld-characters # exclude this lines
+
+# add empty lines 
+sed G seinfeld-characters
+
+sed '8!s/Seinfeld/JOJO/g' seinfeld-characters
+
+###############################333
+
+id username
+
+userdel -r username # r to delete home directory
+
+# add user to group
+
+usermod -G superheros spiderman
+
+chgrp -R superheros spiderman
+
+useradd -g superheros -s /bin/bash -c "Ironman Character" -m -d /home/ironman ironman
+
+passwor age
+/etc/login.defs
+
+# Password age
+chage -m 5 -M 90 -W 10 -I 3 username
+chage -l username
+
+*** 
+dmidecode
+fdisk -l
+***
+
+visudo
+
+usermod -aG wheel gm
+
+##################################
+Monitoring users
+who
+last - example last | awk '{print $1}' | sort | uniq
+w
+pinky (new) finger (old)
+id username or without
+
+# Talking to users
+users
+wall (ctrl+d) need sudo
+write username
+
+LDAP protocol
+
+###
+date
+hostname
+uname (-a or -r)
+bc
+
+
+##############################
+
+process status
+ps 
+ps -e
+ps aux
+ps -ef
+ps -u username
+ps -ef | grep firewalld
+
+top -u username
+
+
+
+
+############################
+crontab
+crontab -e to edit (vim mode)
+crontab -l list entries
+crontab -r remove all
+crond crontab deamon - systemctl status crond.service 
+
+at
+
+at 9:40PM enter
+atq list
+atrm #number
+atd at deamon - systemctl status atd.service 
+
+at 2:45 AM 101621 Schedule a job to run on Oct 16th, 2021 at 2:45am
+o at 4PM + 4 days Schedule a job at 4pm four days from now
+o at now +5 hours Schedule a job to run five hours from now
+o at 8:00 AM Sun Schedule a job to 8am on coming Sunday
+o at 10:00 AM next month Schedule a job to 10am next month
+
+
+
+######### Process Management (bg, fg, nice)
+sleep 100 ctrl z
+jobs bg fg
+
+
+
+###########
+
+
+tail -f /var/log/secure and try login
+
+man init ??????????????
+
+
+
+
+
+
+
+
+script
